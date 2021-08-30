@@ -1,28 +1,22 @@
 
-
-fetch("https://api.github.com/users/djadweb/repos").then(
-    (result) => {
-        let resultJson = result.json();
-        console.log(resultJson);
-        return resultJson;
-    }).then(
-        (resultJson) => {
-            console.log("Total Number of repos : " + resultJson.length);
-            return resultJson;
+    async function fetchData() {
+        try {
+            const result = await fetch("https://api.github.com/users/djadweb/repos");      
+            const data = await result.json();            
+            return data;
+        } catch (error) {
+            console.log(error)
+        }        
+      }
+      
+      ( async() => {
+        const data = await fetchData();
+        for(let i = 0; i < data.length - 1; i++) {
+            let divElement = document.createElement("div");
+            let textElement = document.createTextNode(data[i].name);
+            divElement.appendChild(textElement);
+            divElement.setAttribute("id", "repo");
+            document.body.appendChild(divElement);
         }
-    ).then(
-        (resultJson) => {
-            console.log("First Repo is : " + resultJson[0].name);
-            return resultJson;
-        }
-    ).then(
-        (resultJson) => {
-            for(let i = 0; i < resultJson.length - 1; i++) {
-                let divElement = document.createElement("div");
-                let textElement = document.createTextNode(resultJson[i].name);
-                divElement.appendChild(textElement);
-                divElement.setAttribute("id", "repo");
-                document.body.appendChild(divElement);
-            }
-        }
-    )
+      })()
+      
